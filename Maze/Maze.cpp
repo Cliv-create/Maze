@@ -10,14 +10,27 @@ enum Colors { DARKGREEN = 2, RED = 12, YELLOW = 14, BLUE = 9 };
 enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 // enum Objects {HALL, WALL, COIN, ENEMY}; // Значения по умолчанию, каждый следующий на 1 больше
 
-// Секция с функциями
+// Prototypes
 
-bool CoordLevelCompletionCheck(int y, int x, int exit_x, int exit_y) { // 50 13
+bool CoordLevelCompletionCheck(int y, int x, int exit_x, int exit_y);
+void ascii_table();
+void level_generation(int HEIGHT, int WIDTH, int location[][50]);
+void erase_from_position(HANDLE h, COORD position, int color);
+void print_to_position(HANDLE h, COORD position, int color);
+void charachter_placement(HANDLE h, COORD position, int color);
+void cursor_placement_print(HANDLE h, COORD position, int color, string text);
+int main();
+
+// Секция с функциями / Functions
+
+
+bool CoordLevelCompletionCheck(int y, int x, int exit_x, int exit_y) { // 49 13
     if (x == exit_x && y == exit_y) {
         return 1;
     }
     return 0;
 }
+
 
 void ascii_table() { // Table for printing out ASCII symbols
     for (int code = 0; code < 256; code++)
@@ -27,8 +40,16 @@ void ascii_table() { // Table for printing out ASCII symbols
 }
 
 
-
 void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
+
+    // Модель локации - числа которые отвечают за определённые состояния
+    // 0 - коридоры (пустоты)
+    // 1 - стена разрушаемая
+    // 2 - Монетки / аптечки / итд
+    // 3 - Враги
+
+    // генерация локации
+    // Location generation
 
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
@@ -67,17 +88,20 @@ void erase_from_position(HANDLE h, COORD position, int color) { // Стиран�
     cout << " ";
 }
 
+
 void print_to_position(HANDLE h, COORD position, int color) { // Показ ГГ в новой позиции
     SetConsoleCursorPosition(h, position);
     SetConsoleTextAttribute(h, BLUE);
     cout << (char)1;
 }
 
-void cursor_placement_charachter(HANDLE h, COORD position, int color) { // Функция установки курсора в любую точку на экране консоли
+
+void charachter_placement(HANDLE h, COORD position, int color) { // Функция установки курсора в любую точку на экране консоли
     SetConsoleCursorPosition(h, position);
     SetConsoleTextAttribute(h, BLUE);
     cout << (char)1;
 }
+
 
 void cursor_placement_print(HANDLE h, COORD position, int color, string text) { // Функция установки курсора в любую точку на экране консоли
     SetConsoleCursorPosition(h, position);
@@ -91,14 +115,18 @@ void cursor_placement_print(HANDLE h, COORD position, int color, string text) { 
 int main()
 {
     system("title Бомбер!"); // Window title
+
     // Запуск алгоритма случайных чисел
     srand(time(0)); // Random number generator start
     rand();
 
 
-    // --- Настройки
+    // --- Настройки / Settings
 
+
+    // System window number
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Дескриптор окна консоли (порядковый номер окна в системе)
+
 
     // Скрыть стандартный мигающий курсор
     // Hiding standart console cursor
@@ -106,59 +134,19 @@ int main()
     info.bVisible = false;
     info.dwSize = 100;
     SetConsoleCursorInfo(h, &info);
-    // ---
+    
 
     // Level settings
     const int WIDTH = 50; // Level settings. X - Horizontal
     const int HEIGHT = 15; // Level settigns. Y - Vertical
     int location[HEIGHT][WIDTH] = {};
-    // ---
-
+    
 
     // In-game values
     int coins = 0; // Value for collected coins
 
+
     // ---
-
-
-    // Модель локации - числа которые отвечают за определённые состояния
-    // 0 - коридоры (пустоты)
-    // 1 - стена разрушаемая
-    // 2 - Монетки / аптечки / итд
-    // 3 - Враги
-
-    // генерация локации
-    // Location generation
-
-    /*
-    for (int y = 0; y < HEIGHT; y++) // перебор строк
-    {
-        for (int x = 0; x < WIDTH; x++) // перебор столбцов
-        {
-            location[y][x] = rand() % 4; // 0 1 2 3
-
-            if (x == 0 || y == 0 || x == WIDTH - 1 || y == HEIGHT - 1) { // Стены по краям
-                location[y][x] = WALL;
-            }
-
-            if (x == 0 && y == 2 || x == WIDTH - 1 && y == HEIGHT - 3) { // Вход и выход
-                location[y][x] = HALL;
-            }
-
-            if (location[y][x] == ENEMY) { // Проверка, если найдена 3 то... поменять
-                // Определяется вероятность того, останется враг или нет
-                // Допустим, вероятность остаться на уровне - 10%
-                int prob = rand() % 10; // 0-9
-                if (prob != 0) { // 1 2 3 4 5 6 7 8 9
-                    location[y][x] = HALL;
-                }
-
-            }
-
-        }
-        // cout << "\n";
-    }
-    */
 
 
     level_generation(HEIGHT, WIDTH, location);
@@ -208,21 +196,21 @@ int main()
     position.X = 1;
     position.Y = 2;
 
-    cursor_placement_charachter(h, position, BLUE);
+    charachter_placement(h, position, BLUE);
 
-    // Игровой движок (интерактив с пользователем)
+    // Game engine / Игровой движок (интерактив с пользователем)
 
     while (true) {
         int code = _getch(); // Функция приостанавливает работу программу, ждёт реакцию пользователя. Получить информацию о нажатой клавише
         // Пользователь может нажать любую кнопку (энтер, эскейп, пробел, стрелочки), после чего вернётся код нажатой клавишы
 
         if (code == 224) {
-            code = _getch(); // Если первый код был 224, то повторный вызов функции вернёт только один (нормальный) код
+            code = _getch(); // Если первый код был 224, то повторный вызов функции вернёт только один (нормальный) код. cout << code << "\n"; для вывода кода
         }
-        // cout << code << "\n";
 
 
         erase_from_position(h, position, BLUE);
+
 
         switch (code) {
         case ENTER:
@@ -256,9 +244,11 @@ int main()
             break;
         }
 
+
         print_to_position(h, position, BLUE);
 
-        if (CoordLevelCompletionCheck(position.Y, position.X, 50, 13)) {
+
+        if (CoordLevelCompletionCheck(position.Y, position.X, 49, 13)) {
             COORD print_coord = { 53, 5 };
             cursor_placement_print(h, print_coord, RED, "Congrats, game over!");
             print_coord = { 53, 7 };
@@ -267,12 +257,12 @@ int main()
             break;
         }
 
-        // Взаимодействие ГГ с другими обьектами в лабиринте
+
+        // Interacting with other objects / Взаимодействие ГГ с другими обьектами в лабиринте
 
         if (location[position.Y][position.X] == COIN) {
             coins++;
             // cout << coins << "\n";
-            // location[position.Y][position.X] = WALL;
             location[position.Y][position.X] = HALL;
         }
 
