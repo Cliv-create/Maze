@@ -13,7 +13,7 @@ enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 
 // Prototypes
 
-bool CoordLevelCompletionCheck(int y, int x, int exit_x, int exit_y);
+bool CoordCompletionCheck(int y, int x, int exit_x, int exit_y);
 void ascii_table();
 void level_generation(int HEIGHT, int WIDTH, int location[][50]);
 void erase_from_position(HANDLE h, COORD position, int color);
@@ -385,6 +385,29 @@ int main()
             break;
         }
 
+        // Printing HP and COIN
+
+        COORD print_coord = { 51, 1 };
+        cursor_placement_print(h, print_coord, RED, "HP");
+
+        print_coord = { 51, 2 };
+        cursor_placement_print(h, print_coord, RED, health);
+
+        print_coord = { 51, 4 };
+        cursor_placement_print(h, print_coord, YELLOW, "COIN");
+
+        print_coord = { 51, 5 };
+        cursor_placement_print(h, print_coord, YELLOW, coins);
+
+        // HP
+        // (number)
+        // { 51, 1 }
+        // { 51, 2 }
+        // 
+        // COIN
+        // (number)
+        // 51, 4
+        // 51, 5
     }
 
 
