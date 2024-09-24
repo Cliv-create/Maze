@@ -105,10 +105,59 @@ void charachter_placement(HANDLE h, COORD position, int color) { // Функци
 
 void cursor_placement_print(HANDLE h, COORD position, int color, string text) { // Функция установки курсора в любую точку на экране консоли
     SetConsoleCursorPosition(h, position);
-    SetConsoleTextAttribute(h, BLUE);
+    SetConsoleTextAttribute(h, color);
     cout << text;
 }
 
+
+void cursor_placement_print(HANDLE h, COORD position, int color, int text) { // Функция установки курсора в любую точку на экране консоли
+    SetConsoleCursorPosition(h, position);
+    SetConsoleTextAttribute(h, color);
+    cout << text;
+}
+
+
+void cursor_placement_print(HANDLE h, COORD position, int color, double text) { // Функция установки курсора в любую точку на экране консоли
+    SetConsoleCursorPosition(h, position);
+    SetConsoleTextAttribute(h, color);
+    cout << text;
+}
+
+
+/*
+void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location) {
+    for (int y = 0; y < HEIGHT; y++) // перебор строк
+    {
+        for (int x = 0; x < WIDTH; x++) // перебор столбцов
+        {
+            // cout << location[y][x];
+
+            switch (*location[y][x]) {
+            case HALL: // Коридор
+                cout << " ";
+                break;
+            case WALL: // Стены
+                SetConsoleTextAttribute(h, DARKGREEN); // 0-255
+                cout << (char)177;
+                break;
+            case COIN: // Монетки
+                SetConsoleTextAttribute(h, YELLOW); // 0-255
+                cout << (char)15;
+                break;
+            case ENEMY: // Враги
+                SetConsoleTextAttribute(h, RED); // 0-255
+                cout << (char)1;
+                break;
+            default: // Если вывод цифр - значит какой-то вывод не настроен на символ
+                cout << *location[y][x];
+                break;
+            }
+
+        }
+        cout << "\n";
+    }
+}
+*/
 
 
 // Основная функция main
@@ -140,7 +189,8 @@ int main()
     const int WIDTH = 50; // Level settings. X - Horizontal
     const int HEIGHT = 15; // Level settigns. Y - Vertical
     int location[HEIGHT][WIDTH] = {};
-    
+    auto ptr_location = location;
+
 
     // In-game values
     int coins = 0; // Value for collected coins
@@ -248,12 +298,21 @@ int main()
         print_to_position(h, position, BLUE);
 
 
-        if (CoordLevelCompletionCheck(position.Y, position.X, 49, 13)) {
-            COORD print_coord = { 53, 5 };
-            cursor_placement_print(h, print_coord, RED, "Congrats, game over!");
-            print_coord = { 53, 7 };
-            string text = "Amount of coins: " + coins;
-            cursor_placement_print(h, print_coord, RED, text);
+        if (CoordLevelCompletionCheck(position.Y, position.X, 49, 12)) {
+            COORD print_coord = { 56, 1 };
+            cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
+            print_coord = { 56, 2 };
+            cursor_placement_print(h, print_coord, RED, "|| Congrats, game over!");
+            print_coord = { 56, 3 };
+            cursor_placement_print(h, print_coord, RED, "||");
+            print_coord = { 56, 4 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
+            print_coord = { 56, 5 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
+            print_coord = { 59, 5 };
+            cursor_placement_print(h, print_coord, YELLOW, coins);
+            print_coord = { 0, 15 };
+            cursor_placement_print(h, print_coord, DARKGREEN, " ");
             break;
         }
 
