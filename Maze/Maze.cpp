@@ -28,7 +28,7 @@ int main();
 // Секция с функциями / Functions
 
 
-bool CoordLevelCompletionCheck(int y, int x, int exit_x, int exit_y) { // 49 13
+bool CoordCompletionCheck(int y, int x, int exit_x, int exit_y) { // 49 13
     if (x == exit_x && y == exit_y) {
         return 1;
     }
@@ -198,6 +198,7 @@ int main()
 
     // In-game values
     int coins = 0; // Value for collected coins
+    short health = 3;
 
 
     // ---
@@ -302,7 +303,7 @@ int main()
         print_to_position(h, position, BLUE);
 
 
-        if (CoordLevelCompletionCheck(position.Y, position.X, 49, 12)) {
+        if (CoordCompletionCheck(position.Y, position.X, 49, 12)) {
             COORD print_coord = { 56, 1 };
             cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
 
@@ -310,7 +311,10 @@ int main()
             cursor_placement_print(h, print_coord, RED, "|| Congrats, game over!");
 
             print_coord = { 56, 3 };
-            cursor_placement_print(h, print_coord, RED, "||");
+            cursor_placement_print(h, print_coord, RED, "|| Health left: ");
+
+            print_coord = { 72, 3 };
+            cursor_placement_print(h, print_coord, YELLOW, health);
 
             print_coord = { 56, 4 };
             cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
@@ -339,6 +343,46 @@ int main()
             coins++;
             // cout << coins << "\n";
             location[position.Y][position.X] = HALL;
+        }
+
+
+        if (location[position.Y][position.X] == ENEMY && health > 0) {
+            health--;
+            // cout << coins << "\n";
+            location[position.Y][position.X] = HALL;
+        }
+
+
+        if (health == 0) {
+            COORD print_coord = { 56, 1 };
+            cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
+
+            print_coord = { 56, 2 };
+            cursor_placement_print(h, print_coord, RED, "|| Game over! No health left!");
+
+            print_coord = { 56, 3 };
+            cursor_placement_print(h, print_coord, RED, "|| Health left: ");
+
+            print_coord = { 72, 3 };
+            cursor_placement_print(h, print_coord, YELLOW, health);
+
+            print_coord = { 56, 4 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
+
+            print_coord = { 56, 5 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
+
+            string text = to_string(coins);
+            print_coord = { 59, 5 };
+            cursor_placement_print(h, print_coord, YELLOW, text);
+
+            print_coord = { 56, 6 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
+
+            print_coord = { 0, 15 };
+            cursor_placement_print(h, print_coord, DARKGREEN, " ");
+
+            break;
         }
 
     }
