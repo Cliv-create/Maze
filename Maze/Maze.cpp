@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <Windows.h> // Окрашивание консоли и работа с координатами
 #include <conio.h>
+#include <string>
 using namespace std;
 
 // enumeration - перечисление
@@ -304,23 +305,35 @@ int main()
         if (CoordLevelCompletionCheck(position.Y, position.X, 49, 12)) {
             COORD print_coord = { 56, 1 };
             cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
+
             print_coord = { 56, 2 };
             cursor_placement_print(h, print_coord, RED, "|| Congrats, game over!");
+
             print_coord = { 56, 3 };
             cursor_placement_print(h, print_coord, RED, "||");
+
             print_coord = { 56, 4 };
             cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
+
             print_coord = { 56, 5 };
             cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
+
+            string text = to_string(coins);
             print_coord = { 59, 5 };
-            cursor_placement_print(h, print_coord, YELLOW, coins);
+            cursor_placement_print(h, print_coord, YELLOW, text);
+
+            print_coord = { 56, 6 };
+            cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
+
             print_coord = { 0, 15 };
             cursor_placement_print(h, print_coord, DARKGREEN, " ");
+
             break;
         }
 
 
         // Interacting with other objects / Взаимодействие ГГ с другими обьектами в лабиринте
+
 
         if (location[position.Y][position.X] == COIN) {
             coins++;
