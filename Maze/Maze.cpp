@@ -19,6 +19,9 @@ void erase_from_position(HANDLE h, COORD position, int color);
 void print_to_position(HANDLE h, COORD position, int color);
 void charachter_placement(HANDLE h, COORD position, int color);
 void cursor_placement_print(HANDLE h, COORD position, int color, string text);
+void cursor_placement_print(HANDLE h, COORD position, int color, int text);
+void cursor_placement_print(HANDLE h, COORD position, int color, double text);
+void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location);
 int main();
 
 // Секция с функциями / Functions
