@@ -25,7 +25,7 @@ void charachter_placement(HANDLE h, COORD position, int color);
 void cursor_placement_print(HANDLE h, COORD position, int color, string text);
 void cursor_placement_print(HANDLE h, COORD position, int color, int text);
 void cursor_placement_print(HANDLE h, COORD position, int color, double text);
-void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location);
+void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]);
 int main();
 
 
@@ -133,7 +133,7 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text) { 
 
 
 /*
-void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location) {
+void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
         for (int x = 0; x < WIDTH; x++) // перебор столбцов
@@ -167,56 +167,7 @@ void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location) {
 }
 */
 
-
-// Основная функция main
-int main()
-{
-    system("title Бомбер!"); // Window title
-
-    // Запуск алгоритма случайных чисел
-    srand(time(0)); // Random number generator start
-    rand();
-
-
-    // --- Настройки / Settings
-
-
-    // System window number
-    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Дескриптор окна консоли (порядковый номер окна в системе)
-
-
-    // Скрыть стандартный мигающий курсор
-    // Hiding standart console cursor
-    CONSOLE_CURSOR_INFO info;
-    info.bVisible = false;
-    info.dwSize = 100;
-    SetConsoleCursorInfo(h, &info);
-    
-
-    // Level settings
-    const int WIDTH = 50; // Level settings. X - Horizontal
-    const int HEIGHT = 15; // Level settigns. Y - Vertical
-    int location[HEIGHT][WIDTH] = {};
-    auto ptr_location = location;
-
-
-    // In-game values
-    int coins = 0; // Value for collected coins
-    short health = 3;
-
-
-    // ---
-
-
-    level_generation(HEIGHT, WIDTH, location);
-
-
-    // ---
-
-
-    // Показ локации - Представление
-    // Printing location - Presentation
-
+void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
         for (int x = 0; x < WIDTH; x++) // перебор столбцов
@@ -247,6 +198,62 @@ int main()
         }
         cout << "\n";
     }
+}
+
+// Основная функция main
+int main()
+{
+    system("title Бомбер!"); // Window title
+
+    // Запуск алгоритма случайных чисел
+    srand(time(0)); // Random number generator start
+    rand();
+
+
+    // --- Настройки / Settings
+
+
+    // System window number
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Дескриптор окна консоли (порядковый номер окна в системе)
+
+
+    // Скрыть стандартный мигающий курсор
+    // Hiding standart console cursor
+    CONSOLE_CURSOR_INFO info;
+    info.bVisible = false;
+    info.dwSize = 100;
+    SetConsoleCursorInfo(h, &info);
+    
+
+    // Level settings
+    const int WIDTH = 50; // Level settings. X - Horizontal
+    auto p_WIDTH = WIDTH;
+    const int HEIGHT = 15; // Level settigns. Y - Vertical
+    auto p_HEIGHT = HEIGHT;
+    int location[HEIGHT][WIDTH] = {};
+    auto ptr_location = location;
+
+
+    // In-game values
+    int coins = 0; // Value for collected coins
+    short health = 3;
+
+
+    // ---
+
+
+    level_generation(HEIGHT, WIDTH, location);
+
+
+    // ---
+
+
+    // Показ локации - Представление
+    // Printing location - Presentation
+
+
+    presentation(h, HEIGHT, WIDTH, location);
+    
 
     // ---
     // Размещение ГГ
