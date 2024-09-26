@@ -132,41 +132,6 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text) { 
 }
 
 
-/*
-void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
-    for (int y = 0; y < HEIGHT; y++) // перебор строк
-    {
-        for (int x = 0; x < WIDTH; x++) // перебор столбцов
-        {
-            // cout << location[y][x];
-
-            switch (*location[y][x]) {
-            case HALL: // Коридор
-                cout << " ";
-                break;
-            case WALL: // Стены
-                SetConsoleTextAttribute(h, DARKGREEN); // 0-255
-                cout << (char)177;
-                break;
-            case COIN: // Монетки
-                SetConsoleTextAttribute(h, YELLOW); // 0-255
-                cout << (char)15;
-                break;
-            case ENEMY: // Враги
-                SetConsoleTextAttribute(h, RED); // 0-255
-                cout << (char)1;
-                break;
-            default: // Если вывод цифр - значит какой-то вывод не настроен на символ
-                cout << *location[y][x];
-                break;
-            }
-
-        }
-        cout << "\n";
-    }
-}
-*/
-
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
@@ -395,6 +360,23 @@ int main()
 
             break;
         }
+
+        // Start adding items.
+        // Wall breacher - Once every 3 turns
+        // Placed with a button, next turn - erases walls in
+        // 
+        //  #
+        // ###
+        //  #
+        // 
+        // Shape
+        // 
+        // Button interaction must proceed ONLY if (wallbreacher == 3 or wallbreacher > 3)
+        // 
+        // 
+        
+
+
 
         // Printing HP and COIN
 
