@@ -4,6 +4,7 @@
 #include <string>
 using namespace std;
 
+
 // enumeration - перечисление
 // Например, чтобы не запоминать коды клавиш
 enum KeyCodes { ENTER = 13, ESCAPE = 27, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80, SPACEBAR = 32 };
@@ -11,9 +12,11 @@ enum Colors { DARKGREEN = 2, RED = 12, YELLOW = 14, BLUE = 9 };
 enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 // enum Objects {HALL, WALL, COIN, ENEMY}; // Значения по умолчанию, каждый следующий на 1 больше
 
+
 // Prototypes
 
-bool CoordCompletionCheck(int y, int x, int exit_x, int exit_y);
+
+bool CoordCompletionCheck(int y, int x, int point_x, int point_y);
 void ascii_table();
 void level_generation(int HEIGHT, int WIDTH, int location[][50]);
 void erase_from_position(HANDLE h, COORD position, int color);
@@ -25,11 +28,12 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text);
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int* location);
 int main();
 
+
 // Секция с функциями / Functions
 
 
-bool CoordCompletionCheck(int y, int x, int exit_x, int exit_y) { // 49 13
-    if (x == exit_x && y == exit_y) {
+bool CoordCompletionCheck(int y, int x, int point_x, int point_y) { // 49 13
+    if (x == point_x && y == point_y) {
         return 1;
     }
     return 0;
