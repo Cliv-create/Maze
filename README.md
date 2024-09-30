@@ -1,5 +1,5 @@
 # Maze
-A simple implementation of C++ Maze project.
+A simple implementation of C++ game project.
 Currently there are:
 - Player
 - Walls
