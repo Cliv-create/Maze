@@ -191,6 +191,7 @@ int main()
     
 
     // Level settings
+
     const int WIDTH = 50; // Level settings. X - Horizontal
     auto p_WIDTH = WIDTH;
     const int HEIGHT = 15; // Level settigns. Y - Vertical
@@ -198,6 +199,17 @@ int main()
     int location[HEIGHT][WIDTH] = {};
     auto ptr_location = location;
 
+    // Level array creation
+    
+    /*
+    int width = 50;
+    int height = 15;
+    int** location = new int* [height];
+    for (int y = 0; y < height; y++) {
+        location[y] = new int[width];
+    }
+    */
+    
 
     // In-game values
     int coins = 0; // Value for collected coins
