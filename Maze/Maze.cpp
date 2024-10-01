@@ -94,6 +94,49 @@ void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
 
 }
 
+/*
+void level_generation(int height, int width, int location**) {
+
+    // Модель локации - числа которые отвечают за определённые состояния
+    // 0 - коридоры (пустоты)
+    // 1 - стена разрушаемая
+    // 2 - Монетки / аптечки / итд
+    // 3 - Враги
+
+    // генерация локации
+    // Location generation
+
+    for (int y = 0; y < height; y++) // перебор строк
+    {
+        for (int x = 0; x < width; x++) // перебор столбцов
+        {
+            location[y][x] = rand() % 4; // 0 1 2 3
+
+            if (x == 0 || y == 0 || x == width - 1 || y == height - 1) { // Стены по краям
+                location[y][x] = WALL;
+            }
+
+            if (x == 0 && y == 2 || x == width - 1 && y == height - 3) { // Вход и выход
+                location[y][x] = HALL;
+            }
+
+            if (location[y][x] == ENEMY) { // Проверка, если найдена 3 то... поменять
+                // Определяется вероятность того, останется враг или нет
+                // Допустим, вероятность остаться на уровне - 10%
+                int prob = rand() % 10; // 0-9
+                if (prob != 0) { // 1 2 3 4 5 6 7 8 9
+                    location[y][x] = HALL;
+                }
+
+            }
+
+        }
+        // cout << "\n";
+    }
+
+}
+*/
+
 
 void erase_from_position(HANDLE h, COORD position, int color) { // Стирание ГГ в старой позиции
     SetConsoleCursorPosition(h, position);
@@ -170,6 +213,42 @@ void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
         cout << "\n";
     }
 }
+
+/*
+void presentation(HANDLE h, int height, int width, int location**) {
+    for (int y = 0; y < height; y++) // перебор строк
+    {
+        for (int x = 0; x < width; x++) // перебор столбцов
+        {
+            // cout << location[y][x];
+
+            switch (location[y][x]) {
+            case HALL: // Коридор
+                cout << " ";
+                break;
+            case WALL: // Стены
+                SetConsoleTextAttribute(h, DARKGREEN); // 0-255
+                cout << (char)177;
+                break;
+            case COIN: // Монетки
+                SetConsoleTextAttribute(h, YELLOW); // 0-255
+                cout << (char)15;
+                break;
+            case ENEMY: // Враги
+                SetConsoleTextAttribute(h, RED); // 0-255
+                cout << (char)1;
+                break;
+            default: // Если вывод цифр - значит какой-то вывод не настроен на символ
+                cout << location[y][x];
+                break;
+            }
+
+        }
+        cout << "\n";
+    }
+}
+*/
+
 
 
 void print_win_statistics(HANDLE h, short health, int coins) {
@@ -327,6 +406,9 @@ int main()
 
     // Level settings
 
+    /*
+    
+    */
     const int WIDTH = 50; // Level settings. X - Horizontal
     auto p_WIDTH = WIDTH;
     const int HEIGHT = 15; // Level settigns. Y - Vertical
@@ -344,6 +426,7 @@ int main()
         location[y] = new int[width];
     }
     */
+
     // color_table(h);
 
     // In-game values
