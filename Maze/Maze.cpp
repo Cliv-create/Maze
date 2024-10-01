@@ -18,6 +18,7 @@ enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 
 bool CoordCompletionCheck(int y, int x, int point_x, int point_y);
 void ascii_table();
+// void level_generation(int HEIGHT, int WIDTH, int** location);
 void level_generation(int HEIGHT, int WIDTH, int location[][50]);
 void erase_from_position(HANDLE h, COORD position, int color);
 void print_to_position(HANDLE h, COORD position, int color);
@@ -25,6 +26,7 @@ void charachter_placement(HANDLE h, COORD position, int color);
 void cursor_placement_print(HANDLE h, COORD position, int color, string text);
 void cursor_placement_print(HANDLE h, COORD position, int color, int text);
 void cursor_placement_print(HANDLE h, COORD position, int color, double text);
+// void presentation (HANDLE h, int height, int width, int** location);
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]);
 void print_win_statistics(HANDLE h, short health, int coins);
 void print_no_health_statistics(HANDLE h, short health, int coins);
@@ -52,7 +54,7 @@ void ascii_table() { // Table for printing out ASCII symbols
 }
 
 
-// void level_generation(int height, int width, int location**)
+// void level_generation(int height, int width, int** location)
 void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
 
     // Модель локации - числа которые отвечают за определённые состояния
@@ -95,7 +97,7 @@ void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
 }
 
 /*
-void level_generation(int height, int width, int location**) {
+void level_generation(int height, int width, int** location) {
 
     // Модель локации - числа которые отвечают за определённые состояния
     // 0 - коридоры (пустоты)
@@ -180,7 +182,7 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text) { 
 }
 
 
-// void presentation(HANDLE h, int height, int width, int location**)
+// void presentation(HANDLE h, int height, int width, int** location)
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
@@ -215,7 +217,7 @@ void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
 }
 
 /*
-void presentation(HANDLE h, int height, int width, int location**) {
+void presentation(HANDLE h, int height, int width, int** location) {
     for (int y = 0; y < height; y++) // перебор строк
     {
         for (int x = 0; x < width; x++) // перебор столбцов
