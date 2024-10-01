@@ -18,16 +18,14 @@ enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 
 bool CoordCompletionCheck(int y, int x, int point_x, int point_y);
 void ascii_table();
-// void level_generation(int HEIGHT, int WIDTH, int** location);
-void level_generation(int HEIGHT, int WIDTH, int location[][50]);
+void level_generation(int HEIGHT, int WIDTH, int** location);
 void erase_from_position(HANDLE h, COORD position, int color);
 void print_to_position(HANDLE h, COORD position, int color);
 void charachter_placement(HANDLE h, COORD position, int color);
 void cursor_placement_print(HANDLE h, COORD position, int color, string text);
 void cursor_placement_print(HANDLE h, COORD position, int color, int text);
 void cursor_placement_print(HANDLE h, COORD position, int color, double text);
-// void presentation (HANDLE h, int height, int width, int** location);
-void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]);
+void presentation (HANDLE h, int height, int width, int** location);
 void print_win_statistics(HANDLE h, short health, int coins);
 void print_no_health_statistics(HANDLE h, short health, int coins);
 void color_table(HANDLE h);
@@ -54,49 +52,6 @@ void ascii_table() { // Table for printing out ASCII symbols
 }
 
 
-// void level_generation(int height, int width, int** location)
-void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
-
-    // Модель локации - числа которые отвечают за определённые состояния
-    // 0 - коридоры (пустоты)
-    // 1 - стена разрушаемая
-    // 2 - Монетки / аптечки / итд
-    // 3 - Враги
-
-    // генерация локации
-    // Location generation
-
-    for (int y = 0; y < HEIGHT; y++) // перебор строк
-    {
-        for (int x = 0; x < WIDTH; x++) // перебор столбцов
-        {
-            location[y][x] = rand() % 4; // 0 1 2 3
-
-            if (x == 0 || y == 0 || x == WIDTH - 1 || y == HEIGHT - 1) { // Стены по краям
-                location[y][x] = WALL;
-            }
-
-            if (x == 0 && y == 2 || x == WIDTH - 1 && y == HEIGHT - 3) { // Вход и выход
-                location[y][x] = HALL;
-            }
-
-            if (location[y][x] == ENEMY) { // Проверка, если найдена 3 то... поменять
-                // Определяется вероятность того, останется враг или нет
-                // Допустим, вероятность остаться на уровне - 10%
-                int prob = rand() % 10; // 0-9
-                if (prob != 0) { // 1 2 3 4 5 6 7 8 9
-                    location[y][x] = HALL;
-                }
-
-            }
-
-        }
-        // cout << "\n";
-    }
-
-}
-
-/*
 void level_generation(int height, int width, int** location) {
 
     // Модель локации - числа которые отвечают за определённые состояния
@@ -137,7 +92,7 @@ void level_generation(int height, int width, int** location) {
     }
 
 }
-*/
+
 
 
 void erase_from_position(HANDLE h, COORD position, int color) { // Стирание ГГ в старой позиции
@@ -182,41 +137,6 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text) { 
 }
 
 
-// void presentation(HANDLE h, int height, int width, int** location)
-void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
-    for (int y = 0; y < HEIGHT; y++) // перебор строк
-    {
-        for (int x = 0; x < WIDTH; x++) // перебор столбцов
-        {
-            // cout << location[y][x];
-
-            switch (location[y][x]) {
-            case HALL: // Коридор
-                cout << " ";
-                break;
-            case WALL: // Стены
-                SetConsoleTextAttribute(h, DARKGREEN); // 0-255
-                cout << (char)177;
-                break;
-            case COIN: // Монетки
-                SetConsoleTextAttribute(h, YELLOW); // 0-255
-                cout << (char)15;
-                break;
-            case ENEMY: // Враги
-                SetConsoleTextAttribute(h, RED); // 0-255
-                cout << (char)1;
-                break;
-            default: // Если вывод цифр - значит какой-то вывод не настроен на символ
-                cout << location[y][x];
-                break;
-            }
-
-        }
-        cout << "\n";
-    }
-}
-
-/*
 void presentation(HANDLE h, int height, int width, int** location) {
     for (int y = 0; y < height; y++) // перебор строк
     {
@@ -249,7 +169,7 @@ void presentation(HANDLE h, int height, int width, int** location) {
         cout << "\n";
     }
 }
-*/
+
 
 
 
@@ -410,32 +330,32 @@ int main()
     
 
     // Menu function call
-    print_menu(h);
+    // print_menu(h);
     // system("cls");
 
 
     // Level settings
 
     /*
-    
-    */
     const int WIDTH = 50; // Level settings. X - Horizontal
     auto p_WIDTH = WIDTH;
     const int HEIGHT = 15; // Level settigns. Y - Vertical
     auto p_HEIGHT = HEIGHT;
     int location[HEIGHT][WIDTH] = {};
     auto ptr_location = location;
+    */
+    
 
     // Level array creation
     
-    /*
+    
     int width = 50;
     int height = 15;
     int** location = new int* [height];
     for (int y = 0; y < height; y++) {
         location[y] = new int[width];
     }
-    */
+    
 
     // color_table(h);
 
@@ -451,7 +371,7 @@ int main()
     // ---
 
     // level_generation(height, width, location**);
-    level_generation(HEIGHT, WIDTH, location);
+    level_generation(height, width, location);
 
     // ---
 
@@ -460,7 +380,7 @@ int main()
     // Printing location - Presentation
 
     // presentation(h, height, width, location**);
-    presentation(h, HEIGHT, WIDTH, location);
+    presentation(h, height, width, location);
     
 
     // ---
