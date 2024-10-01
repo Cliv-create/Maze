@@ -334,6 +334,10 @@ int print_menu(HANDLE h) {
     * Initialize CIN in DO WHILE cycle for user to input a number for menu
     */
 
+
+    /*
+    * TODO: Change cursor (blinking console cursor) to it's default (non-blinking) state here.
+    */
     return 0;
 }
 
