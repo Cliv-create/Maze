@@ -8,7 +8,7 @@ using namespace std;
 // enumeration - перечисление
 // Например, чтобы не запоминать коды клавиш
 enum KeyCodes { ENTER = 13, ESCAPE = 27, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80, SPACEBAR = 32 };
-enum Colors { DARKGREEN = 2, RED = 12, YELLOW = 14, BLUE = 9 };
+enum Colors { DARKBLUE = 1, DARKGREEN = 2, LIGHTBLUE = 3, ACCENTRED = 4, PURPLE  = 5, ACCENTYELLOW = 6, LIGHTWHITE = 7, GRAY = 8, GREEN = 10, CYAN = 11, ACCENTPURPLE = 13, WHITE = 15, RED = 12, YELLOW = 14, BLUE = 9 };
 enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
 // enum Objects {HALL, WALL, COIN, ENEMY}; // Значения по умолчанию, каждый следующий на 1 больше
 
@@ -26,6 +26,10 @@ void cursor_placement_print(HANDLE h, COORD position, int color, string text);
 void cursor_placement_print(HANDLE h, COORD position, int color, int text);
 void cursor_placement_print(HANDLE h, COORD position, int color, double text);
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]);
+void print_win_statistics(HANDLE h, short health, int coins);
+void print_no_health_statistics(HANDLE h, short health, int coins);
+void color_table(HANDLE h);
+int print_menu(HANDLE h);
 int main();
 
 
@@ -48,6 +52,7 @@ void ascii_table() { // Table for printing out ASCII symbols
 }
 
 
+// void level_generation(int height, int width, int location**)
 void level_generation(int HEIGHT, int WIDTH, int location[][50]) {
 
     // Модель локации - числа которые отвечают за определённые состояния
@@ -132,6 +137,7 @@ void cursor_placement_print(HANDLE h, COORD position, int color, double text) { 
 }
 
 
+// void presentation(HANDLE h, int height, int width, int location**)
 void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     for (int y = 0; y < HEIGHT; y++) // перебор строк
     {
@@ -165,6 +171,130 @@ void presentation(HANDLE h, int HEIGHT, int WIDTH, int location[][50]) {
     }
 }
 
+
+void print_win_statistics(HANDLE h, short health, int coins) {
+    COORD print_coord = { 56, 1 };
+    cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
+
+    print_coord = { 56, 2 };
+    cursor_placement_print(h, print_coord, RED, "|| Congrats, game over!");
+
+    print_coord = { 56, 3 };
+    cursor_placement_print(h, print_coord, RED, "|| Health left: ");
+
+    print_coord = { 72, 3 };
+    cursor_placement_print(h, print_coord, YELLOW, health);
+
+    print_coord = { 56, 4 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
+
+    print_coord = { 56, 5 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
+
+    string text = to_string(coins);
+    print_coord = { 59, 5 };
+    cursor_placement_print(h, print_coord, YELLOW, text);
+
+    print_coord = { 56, 6 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
+
+    print_coord = { 0, 15 };
+    cursor_placement_print(h, print_coord, DARKGREEN, " ");
+}
+
+
+void print_no_health_statistics(HANDLE h, short health, int coins) {
+    COORD print_coord = { 56, 1 };
+    cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
+
+    print_coord = { 56, 2 };
+    cursor_placement_print(h, print_coord, RED, "|| Game over! No health left!");
+
+    print_coord = { 56, 3 };
+    cursor_placement_print(h, print_coord, RED, "|| Health left: ");
+
+    print_coord = { 72, 3 };
+    cursor_placement_print(h, print_coord, YELLOW, health);
+
+    print_coord = { 56, 4 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
+
+    print_coord = { 56, 5 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
+
+    string text = to_string(coins);
+    print_coord = { 59, 5 };
+    cursor_placement_print(h, print_coord, YELLOW, text);
+
+    print_coord = { 56, 6 };
+    cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
+
+    print_coord = { 0, 15 };
+    cursor_placement_print(h, print_coord, DARKGREEN, " ");
+}
+
+
+void color_table(HANDLE h) {
+    for (int code = 0; code < 256; code++)
+    {
+        SetConsoleTextAttribute(h, code);
+        cout << "Sample text" << " - Code: " << code << "\n";
+    }
+}
+
+
+int print_menu(HANDLE h) {
+    system("cls"); // Clear console window
+    /*
+    Return values:
+    0 - Reserved
+    1 - Exit the program
+    2 - Proceed with main() code (game)
+    */
+
+    /*
+         X
+        Y0 1 2 3 4 5 6 7 8 9 10
+         1
+         2
+         3
+         4
+         5
+         6
+         7
+         8
+         9
+         10
+    */
+
+    /*
+    
+    Background color code: 136
+    
+    */
+
+
+    COORD print_coord = { 0, 0 };
+
+    // X color fill
+    for (short i = 0; i < 50; i++)
+    {
+        cursor_placement_print(h, print_coord, 136, " ");
+
+        for (short x = 0; x < 50; i++) // Y color fill
+        {
+            cursor_placement_print(h, print_coord, 136, " ");
+            print_coord.X++;
+        }
+        print_coord.Y++;
+
+    }
+
+
+    return 0;
+}
+
+
 // Основная функция main
 int main()
 {
@@ -174,7 +304,7 @@ int main()
     srand(time(0)); // Random number generator start
     rand();
 
-
+    
     // --- Настройки / Settings
 
 
@@ -189,6 +319,11 @@ int main()
     info.dwSize = 100;
     SetConsoleCursorInfo(h, &info);
     
+
+    // Menu call
+    // print_menu(h);
+    // system("cls");
+
 
     // Level settings
 
@@ -209,7 +344,7 @@ int main()
         location[y] = new int[width];
     }
     */
-    
+    // color_table(h);
 
     // In-game values
     int coins = 0; // Value for collected coins
@@ -218,7 +353,7 @@ int main()
 
     // ---
 
-
+    // level_generation(height, width, location**);
     level_generation(HEIGHT, WIDTH, location);
 
 
@@ -228,10 +363,9 @@ int main()
     // Показ локации - Представление
     // Printing location - Presentation
 
-
+    // presentation(h, height, width, location**);
     presentation(h, HEIGHT, WIDTH, location);
     
-
     // ---
     // Размещение ГГ
 
@@ -292,33 +426,8 @@ int main()
 
 
         if (CoordCompletionCheck(position.Y, position.X, 49, 12)) {
-            COORD print_coord = { 56, 1 };
-            cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
 
-            print_coord = { 56, 2 };
-            cursor_placement_print(h, print_coord, RED, "|| Congrats, game over!");
-
-            print_coord = { 56, 3 };
-            cursor_placement_print(h, print_coord, RED, "|| Health left: ");
-
-            print_coord = { 72, 3 };
-            cursor_placement_print(h, print_coord, YELLOW, health);
-
-            print_coord = { 56, 4 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
-
-            print_coord = { 56, 5 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
-
-            string text = to_string(coins);
-            print_coord = { 59, 5 };
-            cursor_placement_print(h, print_coord, YELLOW, text);
-
-            print_coord = { 56, 6 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
-
-            print_coord = { 0, 15 };
-            cursor_placement_print(h, print_coord, DARKGREEN, " ");
+            print_win_statistics(h, health, coins);
 
             break;
         }
@@ -326,51 +435,21 @@ int main()
 
         // Interacting with other objects / Взаимодействие ГГ с другими обьектами в лабиринте
 
+        if (location[position.Y][position.X] == ENEMY && health > 0) {
+            health--;
+            // cout << health << "\n";
+            location[position.Y][position.X] = HALL;
+        }
+
+        if (health == 0) {
+            print_no_health_statistics(h, health, coins);
+            break;
+        }
 
         if (location[position.Y][position.X] == COIN) {
             coins++;
             // cout << coins << "\n";
             location[position.Y][position.X] = HALL;
-        }
-
-
-        if (location[position.Y][position.X] == ENEMY && health > 0) {
-            health--;
-            // cout << coins << "\n";
-            location[position.Y][position.X] = HALL;
-        }
-
-
-        if (health == 0) {
-            COORD print_coord = { 56, 1 };
-            cursor_placement_print(h, print_coord, RED, "|| --- --- ---");
-
-            print_coord = { 56, 2 };
-            cursor_placement_print(h, print_coord, RED, "|| Game over! No health left!");
-
-            print_coord = { 56, 3 };
-            cursor_placement_print(h, print_coord, RED, "|| Health left: ");
-
-            print_coord = { 72, 3 };
-            cursor_placement_print(h, print_coord, YELLOW, health);
-
-            print_coord = { 56, 4 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| Amount of coins");
-
-            print_coord = { 56, 5 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| ");
-
-            string text = to_string(coins);
-            print_coord = { 59, 5 };
-            cursor_placement_print(h, print_coord, YELLOW, text);
-
-            print_coord = { 56, 6 };
-            cursor_placement_print(h, print_coord, DARKGREEN, "|| --- --- ---");
-
-            print_coord = { 0, 15 };
-            cursor_placement_print(h, print_coord, DARKGREEN, " ");
-
-            break;
         }
 
         // Start adding items.
@@ -383,26 +462,30 @@ int main()
         // 
         // Shape
         // 
-        // Button interaction must proceed ONLY if (wallbreacher == 3 or wallbreacher > 3)
+        // Button interaction must proceed ONLY if (wallbreacher == 3 or wallbreacher > 3) (This if is a counter, that adds after each turn
         // 
         // 
         
 
 
 
-        // Printing HP and COIN
+        // Printing HP and COIN to HUD
 
+        // { 50, Y } - Should be whitespace between HUD and game screen. Statistics can be adjusted in corresponding functions (level filling and presentation).
+        // { 51-54, Y } - Positions for printing items into HUD. Example: HP, COIN.
+        // { 55, Y } - Should be whitespace between HUD and end-game statistics. Statistics can be adjusted in corresponding functions.
+        
         COORD print_coord = { 51, 1 };
         cursor_placement_print(h, print_coord, RED, "HP");
 
         print_coord = { 51, 2 };
-        cursor_placement_print(h, print_coord, RED, health);
+        cursor_placement_print(h, print_coord, ACCENTRED, health);
 
         print_coord = { 51, 4 };
         cursor_placement_print(h, print_coord, YELLOW, "COIN");
 
         print_coord = { 51, 5 };
-        cursor_placement_print(h, print_coord, YELLOW, coins);
+        cursor_placement_print(h, print_coord, ACCENTYELLOW, coins);
 
         // HP
         // (number)
