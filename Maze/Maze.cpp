@@ -324,51 +324,59 @@ void color_table(HANDLE h) {
 
 int print_menu(HANDLE h) {
     system("cls"); // Clear console window
+
     /*
-    Return values:
-    0 - Reserved
-    1 - Exit the program
-    2 - Proceed with main() code (game)
+    * Function return values:
+    * 0 - Reserved
+    * 1 - Exit the program
+    * 2 - Proceed with main() code (game)
     */
 
     /*
-         X
-        Y0 1 2 3 4 5 6 7 8 9 10
-         1
-         2
-         3
-         4
-         5
-         6
-         7
-         8
-         9
-         10
+    *
+    * print_coord = { X, Y };
+    *
+    *    X
+    *   Y0 1 2 3 4 5 6 7 8 9 10
+    *    1
+    *    2
+    *    3
+    *    4
+    *    5
+    *    6
+    *    7
+    *    8
+    *    9
+    *    10
     */
 
     /*
-    
+
     Background color code: 136
-    
+
     */
 
 
+    // Printing background colors
     COORD print_coord = { 0, 0 };
 
-    // X color fill
-    for (short i = 0; i < 50; i++)
+    for (int y = 0; y < 35; y++) // перебор строк
     {
-        cursor_placement_print(h, print_coord, 136, " ");
-
-        for (short x = 0; x < 50; i++) // Y color fill
+        for (int x = 0; x < 150; x++) // перебор столбцов
         {
             cursor_placement_print(h, print_coord, 136, " ");
             print_coord.X++;
         }
+        print_coord.X = 0;
+        SetConsoleCursorPosition(h, print_coord);
         print_coord.Y++;
-
+        // cout << "\n";
     }
 
+    // {7, 60}
+    // Printing MENU words
+    print_coord = { 55,7 };
+    cursor_placement_print(h, print_coord, 128, "MENU");
 
     return 0;
 }
@@ -399,8 +407,8 @@ int main()
     SetConsoleCursorInfo(h, &info);
     
 
-    // Menu call
-    // print_menu(h);
+    // Menu function call
+    print_menu(h);
     // system("cls");
 
 
@@ -429,6 +437,10 @@ int main()
 
     // color_table(h);
 
+
+    // ---
+
+
     // In-game values
     int coins = 0; // Value for collected coins
     short health = 3;
@@ -439,7 +451,6 @@ int main()
     // level_generation(height, width, location**);
     level_generation(HEIGHT, WIDTH, location);
 
-
     // ---
 
 
@@ -449,7 +460,10 @@ int main()
     // presentation(h, height, width, location**);
     presentation(h, HEIGHT, WIDTH, location);
     
+
     // ---
+    
+
     // Размещение ГГ
 
     COORD position;
@@ -457,6 +471,7 @@ int main()
     position.Y = 2;
 
     charachter_placement(h, position, BLUE);
+
 
     // Game engine / Игровой движок (интерактив с пользователем)
 
@@ -535,28 +550,29 @@ int main()
             location[position.Y][position.X] = HALL;
         }
 
-        // Start adding items.
-        // Wall breacher - Once every 3 turns
-        // Placed with a button, next turn - erases walls in
-        // 
-        //  #
-        // ###
-        //  #
-        // 
-        // Shape
-        // 
-        // Button interaction must proceed ONLY if (wallbreacher == 3 or wallbreacher > 3) (This if is a counter, that adds after each turn
-        // 
-        // 
+        /*
+        * TODO: Start adding items.
+        * Wall breacher - Once every 3 turns
+        * Placed with a button, next turn - erases walls in
+        * 
+        *  #
+        * ###
+        *  #
+        * 
+        * Shape
+        * 
+        * Button interaction must proceed ONLY if (wallbreacher == 3 or wallbreacher > 3) (This if is a counter, that adds after each turn)
+        * 
+        */
         
 
-
-
-        // Printing HP and COIN to HUD
-
-        // { 50, Y } - Should be whitespace between HUD and game screen. Statistics can be adjusted in corresponding functions (level filling and presentation).
-        // { 51-54, Y } - Positions for printing items into HUD. Example: HP, COIN.
-        // { 55, Y } - Should be whitespace between HUD and end-game statistics. Statistics can be adjusted in corresponding functions.
+        /*
+        * Printing HP and COIN to HUD
+        * 
+        * { 50, Y } - Should be whitespace between HUD and game screen. Statistics can be adjusted in corresponding functions (level filling and presentation).
+        * { 51-54, Y } - Positions for printing items into HUD. Example: HP, COIN.
+        * { 55, Y } - Should be whitespace between HUD and end-game statistics. Statistics can be adjusted in corresponding functions.
+        */
         
         COORD print_coord = { 51, 1 };
         cursor_placement_print(h, print_coord, RED, "HP");
@@ -581,5 +597,7 @@ int main()
         // 51, 5
     }
 
+    // Clearing dynamic array
+    // delete[] location;
 
 }
