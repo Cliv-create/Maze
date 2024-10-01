@@ -67,6 +67,13 @@ void level_generation(int height, int width, int** location) {
     {
         for (int x = 0; x < width; x++) // перебор столбцов
         {
+            /*
+            * Filling a tile with random number
+            * 0 - Halls will be printed
+            * 1 - Wall will be printed
+            * 2 - Money will be printed (For now, 100% coin will be placed)
+            * 3 - Bush will be printed (IF with custom probability of that bush being left in tile)
+            */
             location[y][x] = rand() % 4; // 0 1 2 3
 
             if (x == 0 || y == 0 || x == width - 1 || y == height - 1) { // Стены по краям
@@ -87,12 +94,20 @@ void level_generation(int height, int width, int** location) {
 
             }
 
+            /*
+            * TODO: Change rand() % 4 to rand() % 5 to generate numbers 0 1 2 3 4
+            * Add here a copy of above IF with rand() % 15;
+            * This will optionally generate a number 4 with will stand for MEDKIT
+            * 
+            * MEDKIT will increase players HP by 1.
+            * 
+            */
+
         }
         // cout << "\n";
     }
 
 }
-
 
 
 void erase_from_position(HANDLE h, COORD position, int color) { // Стирание ГГ в старой позиции
@@ -165,12 +180,16 @@ void presentation(HANDLE h, int height, int width, int** location) {
                 break;
             }
 
+            /*
+            * TODO: Add 4 option
+            * IF number == 4 - generate and show icon of MEDKIT
+            * MEDKIT will increase player HP by 1.
+            */
+
         }
         cout << "\n";
     }
 }
-
-
 
 
 void print_win_statistics(HANDLE h, short health, int coins) {
@@ -252,6 +271,7 @@ int print_menu(HANDLE h) {
     * 0 - Reserved
     * 1 - Exit the program
     * 2 - Proceed with main() code (game)
+    * 3 - Proceed with mirrored difficulty (mirrored_difficulty function)
     */
 
     /*
@@ -300,8 +320,47 @@ int print_menu(HANDLE h) {
     print_coord = { 55,7 };
     cursor_placement_print(h, print_coord, 128, "MENU");
 
+    /*
+    * TODO:
+    * Add 0 1 2 3 options
+    * 0 - Reserved
+    * 1 - Exit the program
+    * 2 - Proceed with main() code (game)
+    * 3 - Proceed with mirrored difficulty (mirrored_difficulty function)
+    * At 5 line:
+    * Make a FOR cycle (or place cursor and print 5 whitespaces with black background)
+    * Place cursor at the beginning of window with black background
+    * Set up cursor to show again
+    * Initialize CIN in DO WHILE cycle for user to input a number for menu
+    */
+
     return 0;
 }
+
+
+/*
+* TODO: Optionally add a difficulty level, where level will be shifted below, and create a mirrored situation.
+* Player will not know where he needs to go, because level will be displayed below as a mirror.
+* 
+* void mirrored_difficulty(HANDLE h)
+* // Printing background colors
+    COORD print_coord = { 0, 0 };
+
+    for (int y = 0; y < height + 1; y++) // перебор строк
+    {
+        for (int x = 0; x < width + 1; x++) // перебор столбцов
+        {
+            cursor_placement_print(h, print_coord, 0, " ");
+            print_coord.X++;
+        }
+        print_coord.X = 0;
+        SetConsoleCursorPosition(h, print_coord);
+        print_coord.Y++;
+        // cout << "\n";
+    }
+* 
+* 
+*/
 
 
 // Основная функция main
@@ -398,6 +457,18 @@ int main()
     // Game engine / Игровой движок (интерактив с пользователем)
 
     while (true) {
+
+        /*
+        * TODO: Move Game Engine into a function
+        * 
+        * Prototype:
+        * int/void game_engine(HANDLE h, int** location, short health, int coins) {
+        *     COORD position = { 1, 2 }; // Starting position
+        * 
+        *     (Rest of the code here)
+        * }
+        */
+
         int code = _getch(); // Функция приостанавливает работу программу, ждёт реакцию пользователя. Получить информацию о нажатой клавише
         // Пользователь может нажать любую кнопку (энтер, эскейп, пробел, стрелочки), после чего вернётся код нажатой клавишы
 
@@ -465,6 +536,14 @@ int main()
             print_no_health_statistics(h, health, coins);
             break;
         }
+
+        /*
+        * TODO: Add IF check for MEDKIT here
+        * IF position IS MEDKIT
+        * health++;
+        * OPTIONAL: Generate text message in LOG window (TODO)
+        * Found medkit! Health: (health) (Displays last action that is displayed with LOG)
+        */
 
         if (location[position.Y][position.X] == COIN) {
             coins++;
