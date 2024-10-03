@@ -447,7 +447,7 @@ int print_menu_test(HANDLE h) {
     
     switch (user_input) {
         case 1:
-            return 00;
+            return 11;
         case 2:
             return 0;
         case 3:
@@ -510,11 +510,13 @@ int main()
     // Menu function call/output
     unsigned short menu_output = print_menu_test(h);
 
-    if (menu_output == 00) {
+    if (menu_output == 11) {
         position = { 0, 22 };
         cursor_placement_print(h, position, ACCENTRED, "Exiting");
         return 0;
     }
+    system("cls");
+
 
     /*
     switch (menu_output) {
