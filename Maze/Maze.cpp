@@ -2,8 +2,10 @@
 #include <Windows.h> // Окрашивание консоли и работа с координатами
 #include <conio.h>
 #include <string>
+#include "tabulate.hpp"
 using namespace std;
-
+using namespace tabulate;
+using Row_t = Table::Row_t;
 
 // enumeration - перечисление
 // Например, чтобы не запоминать коды клавиш
@@ -29,7 +31,9 @@ void presentation (HANDLE h, int height, int width, int** location);
 void print_win_statistics(HANDLE h, short health, int coins);
 void print_no_health_statistics(HANDLE h, short health, int coins);
 void color_table(HANDLE h);
+bool check_range(const int& value, int min, int max);
 int print_menu(HANDLE h);
+int print_menu_test(HANDLE h);
 int main();
 
 
@@ -263,6 +267,11 @@ void color_table(HANDLE h) {
 }
 
 
+bool check_range(const int& value, int min, int max) {
+    return value >= min && value <= max;
+}
+
+
 int print_menu(HANDLE h) {
     system("cls"); // Clear console window
 
@@ -342,6 +351,116 @@ int print_menu(HANDLE h) {
 }
 
 
+int print_menu_test(HANDLE h) {
+    Table menu;
+
+    menu.format().border_color(Color::green);
+
+    menu.add_row(Row_t{ "C++ Maze" });
+    menu[0].format().font_align(FontAlign::center).font_color(Color::yellow);
+
+    menu.add_row(Row_t{ "https://github.com/Cliv-create/Maze" });
+
+    menu[1].format().font_align(FontAlign::center).font_style({ FontStyle::underline, FontStyle::italic }).font_color(Color::white);
+    /*
+    menu[1]
+        .format()
+        .font_align(FontAlign::center)
+        .font_style({ FontStyle::underline, FontStyle::italic })
+        .font_color(Color::white)
+        .hide_border_top();
+    */
+    
+    menu.add_row(Row_t{ "C++ Maze is a simple project made using procedural programming paradigm" });
+    menu[2].format().font_align(FontAlign::center).font_style({ FontStyle::italic }).font_color(Color::magenta);
+
+
+    Table project_features; // Table with existing features
+
+    project_features.add_row(Row_t{ "Resizable level", "Items", "Customizable" });
+    menu.add_row(Row_t{ project_features }); // Add this table to MAIN table as a row for it
+    menu[3].format().font_align(FontAlign::center);
+
+    Table empty_row;
+    empty_row.format().hide_border();
+    menu.add_row(Row_t{ empty_row });
+    menu[4].format().hide_border_left().hide_border_right();
+
+    menu.add_row(Row_t{ "Choose an option to proceed" });
+    menu[5].format().font_align(FontAlign::center);
+
+    Table format;
+    format.add_row(Row_t{ "Option 1", "Option 2", "Option 3", "ERROR" });
+    format[0].format().font_align(FontAlign::center);
+    format[0][0].format().font_color(Color::white); // .column_separator(":");
+
+    format.column(1).format().width(25).font_align(FontAlign::center);
+    format.column(2).format().width(25).font_align(FontAlign::center);
+    format.column(3).format().width(25).font_align(FontAlign::center);
+
+    format.add_row({ "Exit the program",
+                    "Play the game",
+                    "Proceed with\nmirrored difficulty",
+                    "UNDER\nCONSTRUCTION" });
+    format[1][0].format().font_align(FontAlign::center);
+    format[1][2].format().font_align(FontAlign::center);
+    format[1][3].format().font_align(FontAlign::center);
+
+    format.column(0).format().width(25);
+    // format.column(1).format().border_left(":");
+
+    menu.add_row(Row_t{ format });
+
+    menu[5]
+        .format()
+        .border_color(Color::green)
+        .font_color(Color::cyan)
+        .font_style({ FontStyle::underline })
+        .padding_top(0)
+        .padding_bottom(0);
+
+    cout << menu;
+
+    // { 52, 11 }
+    COORD option_choosing = { 52,11 };
+    // cursor_placement_print(h, option_choosing, RED, " ");
+    SetConsoleCursorPosition(h, option_choosing);
+    cout << "Input: ";
+
+    unsigned short user_input = 0;
+    do {
+        option_choosing = { 59,11 };
+        SetConsoleCursorPosition(h, option_choosing);
+        cout << "";
+        string attempt;
+        cin >> attempt;
+        try {
+            user_input = stoi(attempt); // stoi = string to int
+        }
+        catch (...) {
+            // { 42, 11 } - Print ERROR, immediatly remove it.
+            // cout << "ERROR!\n";
+            SetConsoleCursorPosition(h, option_choosing);
+            cout << "";
+        }
+    } while (!check_range(user_input, 1, 3));
+    
+    switch (user_input) {
+        case 1:
+            return 00;
+        case 2:
+            return 0;
+        case 3:
+            return 1;
+        default:
+            cout << "Error!";
+    }
+
+    // (user_input == 0 || !(user_input < 4) && user_input != (user_input < 0));
+    
+}
+
+
 /*
 * TODO: Optionally add a difficulty level, where level will be shifted below, and create a mirrored situation.
 * Player will not know where he needs to go, because level will be displayed below as a mirror.
@@ -383,6 +502,46 @@ int main()
     // System window number
     HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE); // Дескриптор окна консоли (порядковый номер окна в системе)
 
+    // Creating and initializing COORD value
+    COORD position = { 0, 22 };
+    // ---
+
+
+    // Menu function call/output
+    unsigned short menu_output = print_menu_test(h);
+
+    if (menu_output == 00) {
+        position = { 0, 22 };
+        cursor_placement_print(h, position, ACCENTRED, "Exiting");
+        return 0;
+    }
+
+    /*
+    switch (menu_output) {
+    case 00:
+        // { 0, 22 }
+        position = { 0, 22 };
+        cursor_placement_print(h, position, ACCENTRED, "Exiting");
+        return 0;
+    }
+    */
+    
+
+    /*
+    * Unused cases
+    * 
+    * case 2:
+        break;
+    case 3:
+        // return 1;
+        break;
+    default:
+        cout << "Error!";
+    * 
+    */
+
+    // ---
+    
 
     // Скрыть стандартный мигающий курсор
     // Hiding standart console cursor
@@ -395,7 +554,7 @@ int main()
     // Menu function call
     // print_menu(h);
     // system("cls");
-
+    // print_menu_test(h);
 
     // Level settings
 
@@ -451,9 +610,9 @@ int main()
 
     // Размещение ГГ
 
-    COORD position;
-    position.X = 1;
-    position.Y = 2;
+    position = { 1, 2 };
+    // position.X = 1;
+    // position.Y = 2;
 
     charachter_placement(h, position, BLUE);
 
