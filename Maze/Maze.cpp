@@ -451,7 +451,7 @@ int print_menu_test(HANDLE h) {
         case 2:
             return 0;
         case 3:
-            return 1;
+            return 2;
         default:
             cout << "Error!";
     }
@@ -464,11 +464,13 @@ int print_menu_test(HANDLE h) {
 /*
 * TODO: Optionally add a difficulty level, where level will be shifted below, and create a mirrored situation.
 * Player will not know where he needs to go, because level will be displayed below as a mirror.
-* 
-* void mirrored_difficulty(HANDLE h)
-* // Printing background colors
-    COORD print_coord = { 0, 0 };
+*/
 
+/*
+void mirrored_difficulty(HANDLE h, const int width, const int height) {
+    // Printing background colors
+    
+    COORD print_coord = { 0, 0 };
     for (int y = 0; y < height + 1; y++) // перебор строк
     {
         for (int x = 0; x < width + 1; x++) // перебор столбцов
@@ -481,9 +483,24 @@ int print_menu_test(HANDLE h) {
         print_coord.Y++;
         // cout << "\n";
     }
-* 
-* 
+    print_coord = { 0, height + 1 };
+    SetConsoleCursorPosition(h, print_coord);
+}
 */
+
+
+void increase_2d_empty_array_size(int**& array_ptr, const int& new_width, const int& new_height) {
+    // Takes original array pointer (array_ptr)
+    // Creates new dynamic 2d array (empty)
+    // Deletes old data allocated at array_ptr
+    // Points array_ptr to new location
+    int** temp = new int* [new_height];
+    for (int y = 0; y < new_height; y++) {
+        temp[y] = new int[new_width];
+    }
+    delete[] array_ptr;
+    array_ptr = temp;
+}
 
 
 // Основная функция main
@@ -514,6 +531,9 @@ int main()
         position = { 0, 22 };
         cursor_placement_print(h, position, ACCENTRED, "Exiting");
         return 0;
+    }
+    else if (menu_output == 2) {
+
     }
     system("cls");
 
