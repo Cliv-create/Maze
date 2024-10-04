@@ -822,8 +822,8 @@ int main()
         // timeThread.join();
 
     }
-
     // stopTimer = true;
+    // timeThread.join();
     // Clearing dynamic array
     // delete[] location;
 
