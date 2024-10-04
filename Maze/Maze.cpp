@@ -2,6 +2,8 @@
 #include <Windows.h> // Окрашивание консоли и работа с координатами
 #include <conio.h>
 #include <string>
+#include <thread>
+#include <chrono>
 #include "tabulate.hpp"
 using namespace std;
 using namespace tabulate;
@@ -34,6 +36,8 @@ void color_table(HANDLE h);
 bool check_range(const int& value, int min, int max);
 int print_menu(HANDLE h);
 int print_menu_test(HANDLE h);
+void mirrored_difficulty(HANDLE h, const int width, const int height);
+void increase_2d_empty_array_size(int**& array_ptr, const int& new_width, const int& new_height);
 int main();
 
 
@@ -466,7 +470,7 @@ int print_menu_test(HANDLE h) {
 * Player will not know where he needs to go, because level will be displayed below as a mirror.
 */
 
-/*
+
 void mirrored_difficulty(HANDLE h, const int width, const int height) {
     // Printing background colors
     
@@ -483,10 +487,12 @@ void mirrored_difficulty(HANDLE h, const int width, const int height) {
         print_coord.Y++;
         // cout << "\n";
     }
-    print_coord = { 0, height + 1 };
+    // Setting cursor position at the beginning of line after printing and with a spacing (height + 1)
+    print_coord.X = 0;
+    print_coord.Y = height + 1;
     SetConsoleCursorPosition(h, print_coord);
 }
-*/
+
 
 
 void increase_2d_empty_array_size(int**& array_ptr, const int& new_width, const int& new_height) {
@@ -503,10 +509,36 @@ void increase_2d_empty_array_size(int**& array_ptr, const int& new_width, const 
 }
 
 
+void updateTimeInWindowTitle() {
+    int minutes = 0;
+    int seconds = 0;
+
+    while (true) {
+        // формирование строки времени в формате MM:SS
+        char timeStr[10];
+        sprintf_s(timeStr, "%02d:%02d", minutes, seconds);
+
+        // вывод времени в заголовок консольного окна (работает на Windows)
+        SetConsoleTitleA(timeStr);
+
+        // задержка на 1 секунду
+        this_thread::sleep_for(chrono::seconds(1));
+
+        // обновление секунд и минут
+        seconds++;
+        if (seconds == 60) {
+            seconds = 0;
+            minutes++;
+        }
+    }
+}
+
+
 // Основная функция main
 int main()
 {
     system("title Бомбер!"); // Window title
+    setlocale(0, "");
 
     // Запуск алгоритма случайных чисел
     srand(time(0)); // Random number generator start
@@ -521,6 +553,9 @@ int main()
 
     // Creating and initializing COORD value
     COORD position = { 0, 22 };
+
+    // bool stopTimer = false;
+
     // ---
 
 
@@ -643,6 +678,8 @@ int main()
 
     while (true) {
 
+        // thread timeThread(updateTimeInWindowTitle);
+        
         /*
         * TODO: Move Game Engine into a function
         * 
@@ -781,8 +818,12 @@ int main()
         // (number)
         // 51, 4
         // 51, 5
+
+        // timeThread.join();
+
     }
 
+    // stopTimer = true;
     // Clearing dynamic array
     // delete[] location;
 
