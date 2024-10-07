@@ -38,6 +38,7 @@ int print_menu(HANDLE h);
 int print_menu_test(HANDLE h);
 void mirrored_difficulty(HANDLE h, const int width, const int height);
 void increase_2d_empty_array_size(int**& array_ptr, const int& new_width, const int& new_height);
+void updateTimeInWindowTitle();
 int main();
 
 
@@ -448,6 +449,8 @@ int print_menu_test(HANDLE h) {
             cout << "";
         }
     } while (!check_range(user_input, 1, 3));
+
+    system("cls");
     
     switch (user_input) {
         case 1:
@@ -455,7 +458,7 @@ int print_menu_test(HANDLE h) {
         case 2:
             return 0;
         case 3:
-            return 2;
+            return 22;
         default:
             cout << "Error!";
     }
@@ -556,46 +559,6 @@ int main()
 
     // bool stopTimer = false;
 
-    // ---
-
-
-    // Menu function call/output
-    unsigned short menu_output = print_menu_test(h);
-
-    if (menu_output == 11) {
-        position = { 0, 22 };
-        cursor_placement_print(h, position, ACCENTRED, "Exiting");
-        return 0;
-    }
-    else if (menu_output == 2) {
-
-    }
-    system("cls");
-
-
-    /*
-    switch (menu_output) {
-    case 00:
-        // { 0, 22 }
-        position = { 0, 22 };
-        cursor_placement_print(h, position, ACCENTRED, "Exiting");
-        return 0;
-    }
-    */
-    
-
-    /*
-    * Unused cases
-    * 
-    * case 2:
-        break;
-    case 3:
-        // return 1;
-        break;
-    default:
-        cout << "Error!";
-    * 
-    */
 
     // ---
     
@@ -608,21 +571,7 @@ int main()
     SetConsoleCursorInfo(h, &info);
     
 
-    // Menu function call
-    // print_menu(h);
-    // system("cls");
-    // print_menu_test(h);
-
     // Level settings
-
-    /*
-    const int WIDTH = 50; // Level settings. X - Horizontal
-    auto p_WIDTH = WIDTH;
-    const int HEIGHT = 15; // Level settigns. Y - Vertical
-    auto p_HEIGHT = HEIGHT;
-    int location[HEIGHT][WIDTH] = {};
-    auto ptr_location = location;
-    */
     
 
     // Level array creation
@@ -635,8 +584,31 @@ int main()
         location[y] = new int[width];
     }
     
+    // Menu function call
+    unsigned short menu_output = print_menu_test(h);
 
-    // color_table(h);
+    if (menu_output == 11) {
+        position = { 0, 22 };
+        cursor_placement_print(h, position, ACCENTRED, "Exiting");
+        return 0;
+        system("cls");
+    }
+    else if (menu_output == 22) {
+        mirrored_difficulty(h, width, height);
+    }
+
+    /*
+    * Unused cases
+    *
+    * case 2:
+        break;
+    case 3:
+        // return 1;
+        break;
+    default:
+        cout << "Error!";
+    *
+    */
 
 
     // ---
@@ -658,9 +630,7 @@ int main()
     // Показ локации - Представление
     // Printing location - Presentation
 
-    // presentation(h, height, width, location**);
     presentation(h, height, width, location);
-    
 
     // ---
     
