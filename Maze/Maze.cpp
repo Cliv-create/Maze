@@ -13,7 +13,7 @@ using Row_t = Table::Row_t;
 // Например, чтобы не запоминать коды клавиш
 enum KeyCodes { ENTER = 13, ESCAPE = 27, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80, SPACEBAR = 32 };
 enum Colors { DARKBLUE = 1, DARKGREEN = 2, LIGHTBLUE = 3, ACCENTRED = 4, PURPLE  = 5, ACCENTYELLOW = 6, LIGHTWHITE = 7, GRAY = 8, GREEN = 10, CYAN = 11, ACCENTPURPLE = 13, WHITE = 15, RED = 12, YELLOW = 14, BLUE = 9 };
-enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3 };
+enum Objects { HALL = 0, WALL = 1, COIN = 2, ENEMY = 3, MEDKIT = 4 };
 // enum Objects {HALL, WALL, COIN, ENEMY}; // Значения по умолчанию, каждый следующий на 1 больше
 
 
@@ -83,7 +83,7 @@ void level_generation(int height, int width, int** location) {
             * 2 - Money will be printed (For now, 100% coin will be placed)
             * 3 - Bush will be printed (IF with custom probability of that bush being left in tile)
             */
-            location[y][x] = rand() % 4; // 0 1 2 3
+            location[y][x] = rand() % 5; // 0 1 2 3 -> 0 1 2 3 4
 
             if (x == 0 || y == 0 || x == width - 1 || y == height - 1) { // Стены по краям
                 location[y][x] = WALL;
@@ -102,6 +102,18 @@ void level_generation(int height, int width, int** location) {
                 }
 
             }
+
+            
+            if (location[y][x] == MEDKIT) { // Проверка, если найдена 3 то... поменять
+                // Определяется вероятность того, останется враг или нет
+                // Допустим, вероятность остаться на уровне - 10%
+                int prob = rand() % 15; // 0-9
+                if (prob != 0) { // 1 2 3 4 5 6 7 8 9
+                    location[y][x] = HALL;
+                }
+
+            }
+            
 
             /*
             * TODO: Change rand() % 4 to rand() % 5 to generate numbers 0 1 2 3 4
@@ -184,6 +196,12 @@ void presentation(HANDLE h, int height, int width, int** location) {
                 SetConsoleTextAttribute(h, RED); // 0-255
                 cout << (char)1;
                 break;
+            
+            case MEDKIT: // Враги
+                SetConsoleTextAttribute(h, PURPLE); // 0-255
+                cout << (char)15; // TODO: Select CHAR
+                break;
+            
             default: // Если вывод цифр - значит какой-то вывод не настроен на символ
                 cout << location[y][x];
                 break;
@@ -468,12 +486,6 @@ int print_menu_test(HANDLE h) {
 }
 
 
-/*
-* TODO: Optionally add a difficulty level, where level will be shifted below, and create a mirrored situation.
-* Player will not know where he needs to go, because level will be displayed below as a mirror.
-*/
-
-
 void mirrored_difficulty(HANDLE h, const int width, const int height) {
     // Printing background colors
     
@@ -627,7 +639,7 @@ int main()
     // ---
 
 
-    // Показ локации - Представление
+    // Показ локации - Представление / 
     // Printing location - Presentation
 
     presentation(h, height, width, location);
@@ -730,9 +742,6 @@ int main()
         }
 
         /*
-        * TODO: Add IF check for MEDKIT here
-        * IF position IS MEDKIT
-        * health++;
         * OPTIONAL: Generate text message in LOG window (TODO)
         * Found medkit! Health: (health) (Displays last action that is displayed with LOG)
         */
@@ -742,6 +751,14 @@ int main()
             // cout << coins << "\n";
             location[position.Y][position.X] = HALL;
         }
+
+        
+        if (location[position.Y][position.X] == MEDKIT && health < 3) {
+            health++;
+            location[position.Y][position.X] = HALL;
+        }
+        
+
 
         /*
         * TODO: Start adding items.
@@ -788,8 +805,6 @@ int main()
         // (number)
         // 51, 4
         // 51, 5
-
-        // timeThread.join();
 
     }
     // stopTimer = true;
