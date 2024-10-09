@@ -716,6 +716,8 @@ int main()
             break;
         }
 
+        // Different controls codes
+        // W - 119; A - 970; S - 115; D - 100;
 
         print_to_position(h, position, BLUE);
 
