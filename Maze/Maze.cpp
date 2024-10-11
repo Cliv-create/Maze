@@ -655,7 +655,8 @@ int main()
 
     charachter_placement(h, position, BLUE);
 
-
+    // Launching timer when game starts
+    thread timeThread(updateTimeInWindowTitle);
     // Game engine / Игровой движок (интерактив с пользователем)
 
     while (true) {
@@ -666,7 +667,7 @@ int main()
         * TODO: Move Game Engine into a function
         * 
         * Prototype:
-        * int/void game_engine(HANDLE h, int** location, short health, int coins) {
+        * int/void game_engine(HANDLE h, int** location, short &health, int &coins) {
         *     COORD position = { 1, 2 }; // Starting position
         * 
         *     (Rest of the code here)
@@ -814,4 +815,6 @@ int main()
     // Clearing dynamic array
     // delete[] location;
 
+
+    timeThread.detach();
 }
